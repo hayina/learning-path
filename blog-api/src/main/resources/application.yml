@@ -1,0 +1,10 @@
+management.endpoints.web.exposure.include: health, info, beans
+
+spring:
+  datasource:
+    username: "root"
+    password: "hayat"
+    url: "jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=UTC"
+
+server:
+  port: 9099

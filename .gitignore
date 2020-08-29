@@ -1,0 +1,24 @@
+
+### BLOG API ###
+
+blog-api/target/
+blog-api/HELP.md
+
+### Intellij ###
+blog-api/.idea
+blog-api/*.iws
+blog-api/*.iml
+blog-api/*.ipr
+
+### STS ###
+blog-api/.apt_generated
+blog-api/.classpath
+blog-api/.factorypath
+blog-api/.project
+blog-api/.settings
+blog-api/.springBeans
+blog-api/.sts4-cache
+
+### BLOG API ###
+blog-client/.vscode/
+blog-client/node_modules

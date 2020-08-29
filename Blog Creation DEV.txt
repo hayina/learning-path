@@ -1,0 +1,419 @@
+- @GeneratedValue(strategy = GenerationType.IDENTITY) ?? others strategies of GenerationType  ??
+
+- UUID ??
+
+- IdentityGenerator ?? UUIDGenerator ??
+
+- One thing to note is that IDENTITY generation disables batch updates. ??
+
+- session.getEntityPersister ??
+- Our class also implements the Configurable interface ??
+- Test save() with JUnit ??
+
+- no-arg constructor ?? in-depth !!
+
+- inheritence in hibernate ??
+
+- enum as field in entity
+
+- @Temporal(TemporalType.TIMESTAMP) ?? other types ??
+
+- add a field not mapped into sql table ?
+
+- text vs varchar
+
+- * @Column("post_type") => Cannot find method 'value' => so an anotation must have a method called value to use it this way
+
+-----------------------------
+
+https://stackoverflow.com/questions/51789880/how-to-test-a-component-bean-in-spring-boot
+https://stackoverflow.com/users/270371/davidxxx
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { BlogService.class })
+@DisplayName("Blog Service")
+class BlogServiceTest {
+
+    @Autowired
+    private BlogService projetService;
+
+vs 
+
+@DisplayName("Blog Service")
+class BlogServiceTest {
+
+    BlogService blogService;
+
+    @BeforeEach
+    void init(){
+        blogService = new BlogService();
+    }
+
+
+----------
+
+@MethodSource("savePostMethodSource") works just with @ParameterizedTest !!
+otherwise we get:
+org.junit.jupiter.api.extension.ParameterResolutionException: No ParameterResolver registered for parameter
+
+-----
+
+        when(postRepo.save(any(Post.class))).thenAnswer((invocation) -> {
+            Post argPost = invocation.getArgument(0, Post.class);
+            argPost.setId(id);
+            return argPost;
+        });
+
+-------
+An enum switch case label must be the unqualified name of an enumeration constant
+just 
+case FULL: 
+not 
+case MyEnum.FULL:
+
+----------
+
+isEmpty() vs isBlank()
+https://stackoverflow.com/questions/51299126/difference-between-isempty-and-isblank-method-in-java-11
+
+--------
+
+JUnit struggling
+https://stackoverflow.com/a/48939085/1383538
+
+--------
+
+    public static int indexOfNonWhitespace(byte[] value) {
+        int length = value.length >> 1;
+
+--------
+
+    public boolean live=false;
+
+in a DTO
+
+use cases ??
+
+--------
+
+What happened when we setup a mock and do not use when ??
+
+--------
+
+@Valid vs @Validated ??
+
+https://stackoverflow.com/questions/36173332/difference-between-valid-and-validated-in-spring
+
+------
+
+Autoboxing and Unboxing
+Autoboxing is the automatic conversion that the Java compiler makes between the primitive types and their corresponding object wrapper classes. 
+For example, converting an int to an Integer, a double to a Double, and so on. If the conversion goes the other way, this is called unboxing.
+
+
+Primitive type	Wrapper class
+boolean	Boolean
+byte	Byte
+char	Character
+float	Float
+int	Integer
+long	Long
+short	Short
+double	Double
+
+
+----------
+
+@DataJpaTest
+
+---------
+
+Implementations must comply to the following restriction:
+
+T must resolve to a non parameterized type
+or generic parameters of T must be unbounded wildcard types
+
+??
+
+https://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidator.html
+
+-------
+
+    Pattern pattern = 
+      Pattern.compile("^([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})$");
+
+what means \\ ? to define groups ??
+
+-----------
+
+So, native queries are prime candidates for integration tests. However, if they really use database-specific SQL, those tests might not work with the embedded in-memory database, 
+so we would have to provide a real database in the background (for instance in a docker container that is set up on-demand in the continuous integration pipeline).
+
+https://reflectoring.io/spring-boot-data-jpa-test/
+
+-----------
+
+@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
+
+??
+
+------------
+
+Flyway ?? migration
+
+------------
+
+@MockBean vs @Mock ??
+
+https://stackoverflow.com/questions/44200720/difference-between-mock-mockbean-and-mockito-mock
+
+-----------
+
+  ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+  verify(registerUseCase, times(1)).registerUser(userCaptor.capture(), eq(true));
+
+
+----------------
+
+
+private UserRepository userRepository = Mockito.mock(UserRepository.class);
+This will create an object that looks like a UserRepository from the outside. 
+By default, it will do nothing when a method is called and return null if the method has a return value.
+
+----------------
+
+when(userRepository.save(any(User.class))).then(returnsFirstArg());
+
+-----------
+
+The new operator 
+-instantiates a class by allocating memory for a new object
+-returns a reference to that memory. The new operator
+-invokes the object constructor.
+
+-----------
+
+Polymorphism:
+
+* When an overridden method is called through a superclass reference, Java determines which version(superclass/subclasses) of that method is to be executed based upon the type of the object being referred to at the time the call occurs. Thus, this determination is made at run time.
+* At run-time, it depends on the type of the object being referred to (not the type of the reference variable) that determines which version of an overridden method will be executed
+* A superclass reference variable can refer to a subclass object. This is also known as upcasting. Java uses this fact to resolve calls to overridden methods at run time.
+
+
+https://www.geeksforgeeks.org/dynamic-method-dispatch-runtime-polymorphism-java
+https://www.javatpoint.com/runtime-polymorphism-in-java
+
+class A{}  
+class B extends A{}  
+A a=new B();//upcasting  
+
+
+-----------
+
+BeanPostProcessors 
+
+-----------
+
+@Nullable
+
+
+-----------
+
+
+    final int age;
+    String nickname;
+
+
+
+    public Cat(){
+        this.age=15;
+    }
+    
+    public Cat(String nickname){
+        this.nickname=nickname;
+    }
+
+attention -> Variable 'age' might not have been initialized !!!!!!!!!!!!
+we have to intialized it in all constructors !!!
+
+-----------
+
+https://reflectoring.io/spring-bean-lifecycle/
+
+--- setBeanName executed ---
+--- setApplicationContext executed ---
+--- postProcessBeforeInitialization executed ---
+--- @PostConstruct executed ---
+--- afterPropertiesSet executed ---
+--- init-method executed ---
+--- postProcessAfterInitialization executed ---
+...
+--- @PreDestroy executed ---
+--- destroy executed ---
+--- destroy-method executed ---
+
+
+-----------
+
+nested inner static class 
+https://stackoverflow.com/questions/70324/java-inner-class-and-static-nested-class
+
+-----------
+
+maven runtime scope
+https://stackoverflow.com/questions/45842742/when-would-i-need-maven-dependency-with-runtime-scope
+
+-----------
+
+Differences between dependencyManagement and dependencies in Maven
+
+-----------
+
+maven snapshot
+
+https://stackoverflow.com/questions/5901378/what-exactly-is-a-maven-snapshot-and-why-do-we-need-it
+
+-----------
+checked exception ?? in method signature ??
+A technical exception is usually derived from Java’s RuntimeException, meaning that it doesn’t have to be declared in a method signature. ??
+
+https://reflectoring.io/business-exceptions/
+
+the way Spring handles exceptions:
+
+If a runtime exception bubbles out of a method that is annotated with @Transactional, the transaction is marked for rollback.
+If a checked exception bubbles out of a method that is annotated with @Transactional, the transaction is not marked for rollback (= nothing happens).
+
+https://www.geeksforgeeks.org/checked-vs-unchecked-exceptions-in-java/
+https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html 
+If a client can reasonably be expected to recover from an exception, make it a checked exception. 
+If a client cannot do anything to recover from the exception, make it an unchecked exception
+-----------
+
+Java Object Mapping ?? mapper ??
+
+-----------
+
+QA team ??
+
+-----------
+
+savepoints ??
+
+-----------
+
+
+unit vs integration test ?
+
+
+--------
+
+unit test for empty request body
+
+
+-------
+
+var post = editMode ? postRepo.getOne(postDto.getId()) : new Post();
+getOne is hitting the database !!!
+
+-------
+
+@Transient
+@PostLoad
+@PrePersist
+
+---------------------
+
+Modifier 'public' not allowed here
+as constructor of enum
+
+
+---------------
+
+what is a lazy stream
+https://stackoverflow.com/questions/23696317/find-first-element-by-predicate
+
+------------------
+
+@InitBinder
+public void initBinder(WebDataBinder dataBinder) {
+    dataBinder.registerCustomEditor(YourEnum.class, new YourEnumConverter());
+}
+
+https://stackoverflow.com/questions/39774427/springs-requestparam-with-enum
+
+--------------------
+
+
+check this code if optimal
+
+        return Stream.of(PostType.values())
+                .filter(type -> type.value().equals(value))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+
+
+----------------------
+
+what means {} with arrays ??
+
+
+------------------
+
+@JsonValue
+@JsonCreator
+
+---------------------
+
+is getValue() restricted word in Enums ??
+
+-----------------
+
+conflict between jackson deserialization and spring converter ?? :!!!!!!!!!!!!!!
+
+
+------------------
+
+maven modules vs adding dependency vs java modules ?? !!!!!!!!!!!!!!!!!!!!!!
+
+
+----------
+
+
+delete is performing a select before !!!!
+
+
+-------
+
+@EmbeddedId
+@Embeddable
+
+------------
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag", referencedColumnName = "id")
+    )
+    private Set<Tag> tags = new HashSet<>();
+
+
+-----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
